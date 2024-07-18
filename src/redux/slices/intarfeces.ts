@@ -7,4 +7,6 @@ export interface IWeatherState {
   weatherUnitType: WeatherUnitType;
   activeWeatherHourNumber: number;
   weatherData: Record<string, any>;
+  suggestions: string[];
+  selectedSuggestion: string;
 }

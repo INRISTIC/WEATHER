@@ -10,6 +10,8 @@ const initialState: IWeatherState = {
   searchValue: '',
   weatherUnitType: WeatherUnitType.METRIC,
   activeWeatherHourNumber: 0,
+  suggestions: [],
+  selectedSuggestion: '',
   weatherData: {},
 };
 
@@ -44,9 +46,19 @@ const weatherSlice = createSlice({
     setActiveWeatherHourNumber(state, action: PayloadAction<number>) {
       state.activeWeatherHourNumber = action.payload;
     },
+    getSuggestions(state, action: PayloadAction<string>) {
+      console.log( action.payload)
+
+    },
+    setSuggestions(state, action: PayloadAction<string[]>) {
+      state.suggestions = action.payload;
+    },
+    setSelectedSuggestion(state, action: PayloadAction<string>) {
+      state.selectedSuggestion = action.payload;
+    },
   },
 });
 
-export const { putWeatherData, getWeatherData, getWeatherDataByCoords, setError, setTemperatureType, setSearchValue, setActiveWeatherHourNumber } = weatherSlice.actions;
+export const { putWeatherData, getWeatherData, getWeatherDataByCoords, setError, setTemperatureType, setSearchValue, setActiveWeatherHourNumber, getSuggestions, setSuggestions, setSelectedSuggestion } = weatherSlice.actions;
 
 export default weatherSlice.reducer;

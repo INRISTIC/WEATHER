@@ -124,7 +124,7 @@ const App: React.FC = () => {
     <GlobalStyle />
         <AppContainer>
           <SettingsContainer className={!!error ? 'error' : ''}>
-            <SearchInput searchValue={searchValue} />
+            <SearchInput theme={theme} searchValue={searchValue} />
             <TemperatureTypeToggle theme={theme} weatherUnitType={weatherUnitType} />
             <ToggleTheme theme={theme} toggleTheme={toggleTheme} />
           </SettingsContainer>
