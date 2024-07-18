@@ -1,6 +1,7 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
-import { putWeatherData, getWeatherData, getWeatherDataByCoords, setError } from '../slices/weatherSlice';
+import { putWeatherData, getWeatherData, getWeatherDataByCoords, setError, getSuggestions, setSuggestions } from '../slices/weatherSlice';
 import weatherApi from '../../axios';
+import axios from 'axios';
 
 function* workerWeatherData(action) {
   try {
@@ -43,6 +44,20 @@ function* workerGetWeatherDataBySearch(action) {
   }
 }
 
+function* workerGetSuggestions(action) {
+  try {
+    const response = yield call(axios.get, `https://autocomplete.travelpayouts.com/places2?term=${action.payload}&locale=en&types[]=city`);
+    yield put(setSuggestions(response.data));
+  } catch (error) {
+    console.error('Ошибка при получении подсказок автозаполнения:', error);
+    yield put(setError(true));
+  }
+}
+
+function* watchGetSuggestions() {
+  yield takeLatest(getSuggestions.type, workerGetSuggestions);
+}
+
 function* watchWeatherDataByCoords() {
   yield takeLatest(getWeatherDataByCoords.type, workerWeatherData);
 }
@@ -55,5 +70,6 @@ export default function* rootSaga() {
   yield all([
     watchGetWeatherData(),
     watchWeatherDataByCoords(),
+    watchGetSuggestions(),
   ]);
 }

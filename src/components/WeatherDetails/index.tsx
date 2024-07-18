@@ -71,7 +71,7 @@ const WeatherDetails: React.FC<WeatherDetailsProps> = ({ weatherData, activeWeat
       <WeatherDetailsWrapper>
         <WeatherDetail title="Sunrise" info={convertDate(weatherData.current.sunrise)} icon={Sunrise} />
         <WeatherDetail title="Sunset" info={convertDate(weatherData.current.sunset)} icon={Sunset} />
-        <WeatherDetail title="Precipitation" info={`${weatherData.minutely[0].precipitation}%`} icon={Precipitation} />
+        <WeatherDetail title="Precipitation" info={weatherData.minutely ? `${weatherData.minutely[0].precipitation}%` : '0%'} icon={Precipitation} />
         <WeatherDetail title="Humidity" info={`${weatherData.hourly[activeWeatherHourNumber].humidity}%`} icon={Humidity} />
         <WeatherDetail title="Wind" info={`${(weatherData.hourly[activeWeatherHourNumber].wind_speed * 3.6).toFixed(1)} km/h`} icon={Wind} />
         <WeatherDetail title="Pressure" info={`${parseFloat(weatherData.hourly[activeWeatherHourNumber].pressure)} hPa`} icon={Pressure} />
