@@ -13,7 +13,7 @@ const WeatherDetailContainer = styled.div`
   border-radius: 0.25rem;
   opacity: 0.85;
   box-shadow: 0px 0.25rem 0.5rem #00000029;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   padding: 2.5rem 2rem;
 `;
 
@@ -53,6 +53,6 @@ const WeatherDetail: React.FC<WeatherDetailProps> = ({ title, info, icon }) => {
       </WeatherDetailInfo>
     </WeatherDetailContainer>
   );
-}
+};
 
 export default WeatherDetail;

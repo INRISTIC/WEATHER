@@ -1,8 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { IWeatherState } from './intarfeces';
-import { WeatherUnitType } from '../../../src/intarfeces';
-
+import { ICityDate, IWeatherData, IWeatherState } from './intarfeces';
+import { WeatherUnitType } from '../../weather';
 
 const initialState: IWeatherState = {
   error: false,
@@ -10,9 +9,9 @@ const initialState: IWeatherState = {
   searchValue: '',
   weatherUnitType: WeatherUnitType.METRIC,
   activeWeatherHourNumber: 0,
-  suggestions: [],
-  selectedSuggestion: '',
-  weatherData: {},
+  cities: [],
+  searchedCities: '',
+  weatherData: {} as IWeatherData,
 };
 
 const weatherSlice = createSlice({
@@ -46,19 +45,27 @@ const weatherSlice = createSlice({
     setActiveWeatherHourNumber(state, action: PayloadAction<number>) {
       state.activeWeatherHourNumber = action.payload;
     },
-    getSuggestions(state, action: PayloadAction<string>) {
-      console.log( action.payload)
-
-    },
-    setSuggestions(state, action: PayloadAction<string[]>) {
-      state.suggestions = action.payload;
+    getCities(state, action: PayloadAction<string>) {},
+    setSuggestions(state, action: PayloadAction<ICityDate[]>) {
+      state.cities = action.payload;
     },
     setSelectedSuggestion(state, action: PayloadAction<string>) {
-      state.selectedSuggestion = action.payload;
+      state.searchedCities = action.payload;
     },
   },
 });
 
-export const { putWeatherData, getWeatherData, getWeatherDataByCoords, setError, setTemperatureType, setSearchValue, setActiveWeatherHourNumber, getSuggestions, setSuggestions, setSelectedSuggestion } = weatherSlice.actions;
+export const {
+  putWeatherData,
+  getWeatherData,
+  getWeatherDataByCoords,
+  setError,
+  setTemperatureType,
+  setSearchValue,
+  setActiveWeatherHourNumber,
+  getCities,
+  setSuggestions,
+  setSelectedSuggestion,
+} = weatherSlice.actions;
 
 export default weatherSlice.reducer;

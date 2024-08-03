@@ -1,6 +1,9 @@
 import axios from 'axios';
 
-const API_KEY = 'c0c767d0dbd4142401b9bca74616fa02'; 
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
+
+console.log('API Key:', process.env.REACT_APP_WEATHER_API_KEY); // выводит undefined
+console.log('Autocomplete API URL:', process.env.REACT_APP_AUTOCOMPLETE_API); // выводит undefined
 
 const weatherApi = axios.create({
   baseURL: 'https://api.openweathermap.org/data/2.5/',

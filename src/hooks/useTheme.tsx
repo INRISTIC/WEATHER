@@ -1,42 +1,51 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
-const THEME_KEY = 'app-theme';
+import useLocalStorage from './useLocalStorage';
 
-export enum Theme {
+const THEME_KEY = 'light';
+
+export enum ThemeTypes {
   LIGHT = 'light',
-  DARK = 'dark'
+  DARK = 'dark',
 }
 
-const getPreferredTheme = (): Theme => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    return Theme.DARK;
+const getPreferredTheme = (): ThemeTypes => {
+  if (
+    window.matchMedia &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  ) {
+    return ThemeTypes.DARK;
   }
-  return Theme.LIGHT;
+  return ThemeTypes.LIGHT;
 };
 
-const useTheme = (): [Theme, () => void] => {
-  const storedTheme = localStorage.getItem(THEME_KEY) as Theme | null;
-  const [theme, setTheme] = useState<Theme>(storedTheme || getPreferredTheme());
+const useTheme = (): [ThemeTypes, () => void] => {
+  const [theme, setTheme] = useLocalStorage<ThemeTypes>(
+    THEME_KEY,
+    getPreferredTheme()
+  );
 
   const toggleTheme = () => {
-    const newTheme = theme === Theme.LIGHT ? Theme.DARK : Theme.LIGHT;
-    setTheme(newTheme);
-    localStorage.setItem(THEME_KEY, newTheme);
+    if (theme === ThemeTypes.DARK) {
+      document.body.classList.remove('dark-theme');
+    } else {
+      document.body.classList.add('dark-theme');
+    }
+    setTheme(theme === ThemeTypes.LIGHT ? ThemeTypes.DARK : ThemeTypes.LIGHT);
   };
 
   useEffect(() => {
-    if (!storedTheme) {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      const handleChange = (event: MediaQueryListEvent) => {
-        const newPreferredTheme = event.matches ? Theme.DARK : Theme.LIGHT;
-        setTheme(newPreferredTheme);
-        localStorage.setItem(THEME_KEY, newPreferredTheme);
-      };
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (event: MediaQueryListEvent) => {
+      const newPreferredTheme = event.matches
+        ? ThemeTypes.DARK
+        : ThemeTypes.LIGHT;
+      setTheme(newPreferredTheme);
+    };
 
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
-  }, [storedTheme]);
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, [setTheme]);
 
   return [theme, toggleTheme];
 };

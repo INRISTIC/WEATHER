@@ -1,13 +1,21 @@
 import { takeLatest, call, put, all } from 'redux-saga/effects';
-import { putWeatherData, getWeatherData, getWeatherDataByCoords, setError, getSuggestions, setSuggestions } from '../slices/weatherSlice';
+import {
+  putWeatherData,
+  getWeatherData,
+  getWeatherDataByCoords,
+  setError,
+  getCities,
+  setSuggestions,
+} from '../slices/weatherSlice';
 import weatherApi from '../../axios';
 import axios from 'axios';
+
+const AUTOCOMPLETE_API = process.env.REACT_APP_AUTOCOMPLETE_API;
 
 function* workerWeatherData(action) {
   try {
     const { lat, lon, weatherUnitType } = action.payload;
 
-    console.log(action.payload)
     const { data } = yield call(
       weatherApi.get,
       `onecall?lat=${lat}&lon=${lon}&units=${weatherUnitType}`
@@ -46,7 +54,10 @@ function* workerGetWeatherDataBySearch(action) {
 
 function* workerGetSuggestions(action) {
   try {
-    const response = yield call(axios.get, `https://autocomplete.travelpayouts.com/places2?term=${action.payload}&locale=en&types[]=city`);
+    const response = yield call(
+      axios.get,
+      `${AUTOCOMPLETE_API}?term=${action.payload}&locale=en&types[]=city`
+    );
     yield put(setSuggestions(response.data));
   } catch (error) {
     console.error('Ошибка при получении подсказок автозаполнения:', error);
@@ -55,7 +66,7 @@ function* workerGetSuggestions(action) {
 }
 
 function* watchGetSuggestions() {
-  yield takeLatest(getSuggestions.type, workerGetSuggestions);
+  yield takeLatest(getCities.type, workerGetSuggestions);
 }
 
 function* watchWeatherDataByCoords() {

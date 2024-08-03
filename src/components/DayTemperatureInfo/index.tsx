@@ -12,7 +12,7 @@ const OclockWeatherInfo = styled.div`
   font-size: 26px;
   color: rgba(255, 255, 255, 0.6);
   border-radius: 2.5rem;
-  border: 0.5px solid #FFFFFF;
+  border: 0.5px solid #ffffff;
   padding: 1rem 0.625rem 1.25rem;
   display: flex;
   background-color: rgba(26, 32, 33, 0.3019607843);
@@ -21,7 +21,7 @@ const OclockWeatherInfo = styled.div`
   gap: 0.75rem;
 
   &.oclock-wether-info--active {
-    background-color: #FFFFFF99;
+    background-color: #ffffff99;
     border: none;
   }
 `;
@@ -37,26 +37,38 @@ const OclockWeatherIcon = styled.div`
   height: 42px;
 
   img {
-    scale: 1.5; 
+    scale: 1.5;
   }
 `;
 
-const DayTemperatureInfo = ({ index, time, degrees, activeWeatherHourNumber, imageHref, setActiveWeatherHourNumber }) => {
-
+const DayTemperatureInfo = ({
+  index,
+  time,
+  degrees,
+  activeWeatherHourNumber,
+  imageSrc,
+  setActiveWeatherHourNumber,
+}) => {
   function formatTime(seconds) {
     const time = addSeconds(startOfDay(new Date()), seconds);
     return format(time, 'h a');
   }
-  
 
   return (
     <OclockWeather onClick={setActiveWeatherHourNumber}>
       <OclockWeatherHour>
         {index === 0 ? 'Now' : `${formatTime(time)}`}
       </OclockWeatherHour>
-      <OclockWeatherInfo className={activeWeatherHourNumber === index ? 'oclock-wether-info--active' : ''}>
+      <OclockWeatherInfo
+        className={
+          activeWeatherHourNumber === index ? 'oclock-wether-info--active' : ''
+        }
+      >
         <OclockWeatherIcon>
-          <img src={`https://openweathermap.org/img/wn/${imageHref}@2x.png`} alt="" />
+          <img
+            src={`https://openweathermap.org/img/wn/${imageSrc}@2x.png`}
+            alt=""
+          />
         </OclockWeatherIcon>
         {degrees}°
       </OclockWeatherInfo>

@@ -3,7 +3,6 @@ import styled from 'styled-components';
 
 import WeatherDetail from '../WeatherDetail';
 
-import { convertDate } from '../../utils/convertDate';
 import Sunrise from '../../assets/images/sunrise.svg';
 import Sunset from '../../assets/images/sunset.svg';
 import Precipitation from '../../assets/images/precipitation.svg';
@@ -12,7 +11,8 @@ import Wind from '../../assets/images/wind.svg';
 import Pressure from '../../assets/images/pressure.svg';
 import Temperature from '../../assets/images/temperature.svg';
 import Visibility from '../../assets/images/visibility.svg';
-
+import useAppSelector from '../../hooks/useAppSelector';
+import { WeatherUnitType } from '../../weather';
 
 interface WeatherDetailsProps {
   weatherData: any;
@@ -59,27 +59,83 @@ const WeatherDetailsTitle = styled.h2`
   }
 `;
 
-const WeatherDetails: React.FC<WeatherDetailsProps> = ({ weatherData, activeWeatherHourNumber, convertTemperature }) => {
+const WeatherDetails: React.FC<WeatherDetailsProps> = ({
+  weatherData,
+  activeWeatherHourNumber,
+  convertTemperature,
+}) => {
+  const weatherUnitType = useAppSelector(
+    (state) => state.weather.weatherUnitType
+  );
+
   const convertDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
+  const windData = weatherData.hourly[activeWeatherHourNumber].wind_speed;
+  const wind =
+    weatherUnitType === WeatherUnitType.METRIC
+      ? windData * 3.6
+      : windData * 1.60934;
+
   return (
     <>
       <WeatherDetailsTitle>Weather Details</WeatherDetailsTitle>
       <WeatherDetailsWrapper>
-        <WeatherDetail title="Sunrise" info={convertDate(weatherData.current.sunrise)} icon={Sunrise} />
-        <WeatherDetail title="Sunset" info={convertDate(weatherData.current.sunset)} icon={Sunset} />
-        <WeatherDetail title="Precipitation" info={weatherData.minutely ? `${weatherData.minutely[0].precipitation}%` : '0%'} icon={Precipitation} />
-        <WeatherDetail title="Humidity" info={`${weatherData.hourly[activeWeatherHourNumber].humidity}%`} icon={Humidity} />
-        <WeatherDetail title="Wind" info={`${(weatherData.hourly[activeWeatherHourNumber].wind_speed * 3.6).toFixed(1)} km/h`} icon={Wind} />
-        <WeatherDetail title="Pressure" info={`${parseFloat(weatherData.hourly[activeWeatherHourNumber].pressure)} hPa`} icon={Pressure} />
-        <WeatherDetail title="Feels like" info={`${convertTemperature(weatherData.hourly[activeWeatherHourNumber].feels_like)}°`} icon={Temperature} />
-        <WeatherDetail title="Visibility" info={`${(weatherData.hourly[activeWeatherHourNumber].visibility / 1000).toFixed(1)} km`} icon={Visibility} />
+        <WeatherDetail
+          title="Sunrise"
+          info={convertDate(weatherData.current.sunrise)}
+          icon={Sunrise}
+        />
+        <WeatherDetail
+          title="Sunset"
+          info={convertDate(weatherData.current.sunset)}
+          icon={Sunset}
+        />
+        <WeatherDetail
+          title="Precipitation"
+          info={
+            weatherData.minutely
+              ? `${weatherData.minutely[0].precipitation}%`
+              : '0%'
+          }
+          icon={Precipitation}
+        />
+        <WeatherDetail
+          title="Humidity"
+          info={`${weatherData.hourly[activeWeatherHourNumber].humidity}%`}
+          icon={Humidity}
+        />
+        <WeatherDetail
+          title="Wind"
+          info={`${wind.toFixed(1)} km/h`}
+          icon={Wind}
+        />
+        <WeatherDetail
+          title="Pressure"
+          info={`${parseFloat(
+            weatherData.hourly[activeWeatherHourNumber].pressure
+          )} hPa`}
+          icon={Pressure}
+        />
+        <WeatherDetail
+          title="Feels like"
+          info={`${convertTemperature(
+            weatherData.hourly[activeWeatherHourNumber].feels_like
+          )}°`}
+          icon={Temperature}
+        />
+        <WeatherDetail
+          title="Visibility"
+          info={`${(
+            weatherData.hourly[activeWeatherHourNumber].visibility / 1000
+          ).toFixed(1)} km`}
+          icon={Visibility}
+        />
       </WeatherDetailsWrapper>
     </>
   );
-}
+};
 
 export default WeatherDetails;

@@ -10,27 +10,27 @@ const spin = keyframes`
   }
 `;
 
-const LoaderWrapper = styled.div`
+const SpinnerContainer = styled.div`
   margin: 0 auto;
 `;
 
 const Spinner = styled.div`
-    border: 8px solid rgba(0, 0, 0, 0.1);
-    border-top: 8px solid transparent;
-    border-radius: 50%;
-    width: 64px;
-    height: 64px;
-    animation: ${spin} 1s linear infinite;
-    background-clip: border-box;
-    margin: 0 auto;
-    margin-top: 24rem;
+  border: 8px solid rgba(0, 0, 0, 0.1);
+  border-top: 8px solid transparent;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  animation: ${spin} 1s linear infinite;
+  background-clip: border-box;
+  margin: 0 auto;
+  margin-top: 24rem;
 `;
 
 const Loader: React.FC = () => {
   return (
-    <LoaderWrapper>
+    <SpinnerContainer>
       <Spinner />
-    </LoaderWrapper>
+    </SpinnerContainer>
   );
 };
 

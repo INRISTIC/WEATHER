@@ -25,7 +25,7 @@ const DayWeatherDateInfo = styled.div`
 `;
 
 const DayWeatherDay = styled.span`
-  margin-bottom: 0.5rem;  
+  margin-bottom: 0.5rem;
   font-size: 25px;
 `;
 
@@ -60,7 +60,7 @@ const DayInfoLocationIcon = styled.div`
   height: 1.5rem;
 `;
 
-const DayWeatherInfoComponent = ({ degrees, location, imageHref }) => {
+const DayWeatherInfoComponent = ({ degrees, location, imageSrc }) => {
   return (
     <DayWeather>
       <DayWeatherInfo>
@@ -69,7 +69,10 @@ const DayWeatherInfoComponent = ({ degrees, location, imageHref }) => {
           <DayWeatherDate>{format(new Date(), 'EEE, dd MMM')}</DayWeatherDate>
         </DayWeatherDateInfo>
         <DayWeatherIcon>
-          <img src={`https://openweathermap.org/img/wn/${imageHref}@2x.png`} alt="" />
+          <img
+            src={`https://openweathermap.org/img/wn/${imageSrc}@2x.png`}
+            alt=""
+          />
         </DayWeatherIcon>
       </DayWeatherInfo>
       <DayInfoDegrees>{degrees}</DayInfoDegrees>
